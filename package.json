@@ -1,0 +1,11 @@
+{
+  "name": "link-chatgpt",
+  "version": "1.0.0",
+  "description": "link ChatGPT use Azure and express",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
