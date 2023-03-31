@@ -105,3 +105,6 @@ dist
 
 # gpt 示例代码
 /openai-quickstart-node/
+
+# 没完成 azure 注册，先禁用 github actions
+.github/
