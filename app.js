@@ -1,16 +1,14 @@
 // 添加env到app
-require('dotenv').config();
-
 const express = require('express');
 const axios = require('axios');
-
+const nodejieba = require('nodejieba');
 const app = express();
 app.use(express.json());
+require('dotenv').config();
 
 const PORT = process.env.PORT || 3000;
 const GPT_API_KEY = process.env.GPT_API_KEY;
-
-const gptApiUrl = 'https://api.openai.com/v1/engines/davinci-codex/completions';
+const GPT_API_URL = process.env.GPT_API_URL;
 
 const medicalKeywords = [
   '治疗',
@@ -30,12 +28,15 @@ const sensitiveWords = [
   // 添加其他敏感词
 ];
 
+// 在app.js的其他代码中
 function isMedicalContent(text) {
-  return medicalKeywords.some(keyword => text.includes(keyword));
+  const keywords = nodejieba.extract(text, 10);
+  return keywords.some(keyword => medicalKeywords.includes(keyword.word));
 }
 
 function containsSensitiveWords(text) {
-  return sensitiveWords.some(word => text.includes(word));
+  const words = nodejieba.cut(text);
+  return words.some(word => sensitiveWords.includes(word));
 }
 
 app.post('/gpt-proxy', async (req, res) => {
@@ -48,7 +49,7 @@ app.post('/gpt-proxy', async (req, res) => {
 
   try {
     const response = await axios.post(
-      gptApiUrl,
+      GPT_API_URL,
       {
         prompt: inputText,
         max_tokens: 100
