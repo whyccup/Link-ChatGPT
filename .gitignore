@@ -104,4 +104,4 @@ dist
 .tern-port
 
 # gpt 示例代码
-openai-quickstart-node
+/openai-quickstart-node/
