@@ -22,4 +22,4 @@ async function getModeList() {
   const response = await openai.listModels();
   console.log(response);
 }
-export { generateText, getModeList };
+export { openai, generateText, getModeList };
