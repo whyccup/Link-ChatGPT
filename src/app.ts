@@ -1,33 +1,13 @@
 import express, { Request, Response } from 'express';
-import axios from 'axios';
-import { config as dotenvConfig } from 'dotenv';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const Segment = require('segment');
-import MEDICAL_KEYWORDS from './keywords/medical.json';
+import dotenv from 'dotenv';
+import { isMedicalContent, containsSensitiveWords } from './utils';
+import { generateText } from './gpt-client';
 
-dotenvConfig();
+dotenv.config();
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 app.use(express.json());
-
-const PORT = process.env.PORT || 3000;
-const GPT_API_KEY = process.env.GPT_API_KEY;
-const GPT_API_URL = process.env.GPT_API_URL || 'https://api.openai.com/v1/engines/davinci-codex/completions';
-const SENSITIVE_WORDS: string[] = ['习近', '平'];
-
-const segment = new Segment();
-segment.useDefault();
-
-function isMedicalContent(text: string): boolean {
-  const keywords = segment.doSegment(text, { simple: true });
-  return keywords.some((keyword: string) => MEDICAL_KEYWORDS.includes(keyword));
-}
-
-function containsSensitiveWords(text: string): boolean {
-  const words = segment.doSegment(text, { simple: true });
-  console.log(words);
-  return words.some((word: string) => SENSITIVE_WORDS.includes(word));
-}
 
 app.post('/gpt-proxy', async (req: Request, res: Response) => {
   const inputText = req.body.text;
@@ -39,20 +19,7 @@ app.post('/gpt-proxy', async (req: Request, res: Response) => {
   }
 
   try {
-    const response = await axios.post(
-      GPT_API_URL,
-      {
-        prompt: inputText,
-        max_tokens: 100
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${GPT_API_KEY}`
-        }
-      }
-    );
-
+    const response = await generateText(inputText);
     res.json(response.data.choices[0].text);
   } catch (error) {
     res.status(500).json({ error: 'GPT API请求失败' });
@@ -62,5 +29,3 @@ app.post('/gpt-proxy', async (req: Request, res: Response) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-
-export { isMedicalContent, containsSensitiveWords };
