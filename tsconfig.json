@@ -12,7 +12,8 @@
     "paths": {
       "@": ["*"]
     },
-    "typeRoots": ["src/typings", "node_modules/@types"]
+    "typeRoots": ["src/typings", "node_modules/@types"],
+    "types": ["jest", "node", "axios"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]
