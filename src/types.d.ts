@@ -1,3 +1,4 @@
+// fix json type undefined
 declare module '*.json' {
   const value: any;
   export default value;
