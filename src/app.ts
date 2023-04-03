@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import axios from 'axios';
 import { config as dotenvConfig } from 'dotenv';
 import Segment from 'segment';
-import MEDICAL_KEYWORDS from './keywords/medicalKeywords.json';
+import MEDICAL_KEYWORDS from './keywords/medical.json';
 
 dotenvConfig();
 
@@ -11,9 +11,7 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 const GPT_API_KEY = process.env.GPT_API_KEY;
-const GPT_API_URL =
-  process.env.GPT_API_URL ||
-  'https://api.openai.com/v1/engines/davinci-codex/completions';
+const GPT_API_URL = process.env.GPT_API_URL || 'https://api.openai.com/v1/engines/davinci-codex/completions';
 const SENSITIVE_WORDS: string[] = [
   // 添加其他敏感词
 ];
