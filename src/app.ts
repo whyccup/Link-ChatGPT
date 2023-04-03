@@ -1,7 +1,8 @@
 import express, { Request, Response } from 'express';
 import axios from 'axios';
 import { config as dotenvConfig } from 'dotenv';
-import Segment from 'segment';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const Segment = require('segment');
 import MEDICAL_KEYWORDS from './keywords/medical.json';
 
 dotenvConfig();
@@ -12,11 +13,8 @@ app.use(express.json());
 const PORT = process.env.PORT || 3000;
 const GPT_API_KEY = process.env.GPT_API_KEY;
 const GPT_API_URL = process.env.GPT_API_URL || 'https://api.openai.com/v1/engines/davinci-codex/completions';
-const SENSITIVE_WORDS: string[] = [
-  // 添加其他敏感词
-];
+const SENSITIVE_WORDS: string[] = ['习近', '平'];
 
-// 添加词典
 const segment = new Segment();
 segment.useDefault();
 
@@ -27,6 +25,7 @@ function isMedicalContent(text: string): boolean {
 
 function containsSensitiveWords(text: string): boolean {
   const words = segment.doSegment(text, { simple: true });
+  console.log(words);
   return words.some((word: string) => SENSITIVE_WORDS.includes(word));
 }
 
