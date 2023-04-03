@@ -11,7 +11,8 @@
     "baseUrl": "./src",
     "paths": {
       "@": ["*"]
-    }
+    },
+    "typeRoots": ["src/typings", "node_modules/@types"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]
