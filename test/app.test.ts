@@ -15,7 +15,7 @@ describe('isMedicalContent', () => {
 
 describe('containsSensitiveWords', () => {
   it('should return true for text containing sensitive words', () => {
-    const text = '这是一个包含敏感词的句子。';
+    const text = '习近平';
     expect(containsSensitiveWords(text)).to.be.true;
   });
 
