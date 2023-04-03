@@ -4,7 +4,7 @@
   "description": "GPT API proxy with content filtering",
   "main": "app.js",
   "scripts": {
-    "test": "mocha",
+    "test": "mocha -r ts-node/register --extensions ts 'test/**/*.ts'",
     "start": "tsc && node dist/app.js",
     "dev": "tsc-watch --onSuccess \"node dist/app.js\""
   },
