@@ -1,0 +1,40 @@
+{
+	"info": {
+		"_postman_id": "5e779623-2a4d-408c-9796-f595bb250ac9",
+		"name": "GPT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "gpt-proxy",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"text\": \"不舒服\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8086/gpt-proxy",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8086",
+					"path": [
+						"gpt-proxy"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
