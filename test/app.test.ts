@@ -72,4 +72,16 @@ describe('POST /gpt-proxy', () => {
     expect(response.status).toBe(500);
     expect(response.body).toEqual({ error: 'GPT API请求失败' });
   });
+
+  it('should return 400 Bad Request if inputText is empty or undefined', async () => {
+    // Test with empty string
+    const responseEmpty = await request(app).post('/gpt-proxy').send({ inputText: '' });
+    expect(responseEmpty.status).toEqual(400);
+    expect(responseEmpty.text).toEqual('Bad Request: inputText is empty or undefined');
+
+    // Test with undefined inputText
+    const responseUndefined = await request(app).post('/gpt-proxy').send({});
+    expect(responseUndefined.status).toEqual(400);
+    expect(responseUndefined.text).toEqual('Bad Request: inputText is empty or undefined');
+  });
 });
