@@ -1,56 +1,75 @@
 import request from 'supertest';
-import express, { Request, Response } from 'express';
-import dotenv from 'dotenv';
-import { generateText, openai } from '../src/gpt-client';
+import app from '../src/app';
+import { isMedicalContent, containsSensitiveWords } from '../src/utils';
+import { generateText } from '../src/gpt-client';
 
-dotenv.config();
+jest.mock('../src/utils', () => ({
+  isMedicalContent: jest.fn(),
+  containsSensitiveWords: jest.fn()
+}));
 
-describe.skip('POST /gpt-proxy', () => {
-  let app: express.Application;
+jest.mock('../src/gpt-client', () => ({
+  generateText: jest.fn()
+}));
 
-  beforeAll(() => {
-    app = express();
-    app.use(express.json());
-    app.post('/gpt-proxy', async (req: Request, res: Response) => {
-      const inputText = req.body.text;
-      const response = await generateText(inputText);
-      res.json(response.data.choices[0].text);
+describe('POST /gpt-proxy', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('returns error if not medical content or contains sensitive words', async () => {
+    (isMedicalContent as jest.Mock).mockReturnValue(false);
+    (containsSensitiveWords as jest.Mock).mockReturnValue(true);
+
+    const response = await request(app).post('/gpt-proxy').send({ text: 'test input' });
+
+    expect(isMedicalContent).toHaveBeenCalledWith('test input');
+    expect(containsSensitiveWords).not.toHaveBeenCalled();
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ error: '非医疗内容或包含敏感词' });
+  });
+
+  it('returns error if contains sensitive words', async () => {
+    (isMedicalContent as jest.Mock).mockReturnValue(true);
+    (containsSensitiveWords as jest.Mock).mockReturnValue(true);
+
+    const response = await request(app).post('/gpt-proxy').send({ text: 'test input' });
+
+    expect(isMedicalContent).toHaveBeenCalledWith('test input');
+    expect(containsSensitiveWords).toHaveBeenCalledWith('test input');
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ error: '非医疗内容或包含敏感词' });
+  });
+
+  test('returns GPT API generated text on success', async () => {
+    (isMedicalContent as jest.Mock).mockReturnValue(true);
+    (containsSensitiveWords as jest.Mock).mockReturnValue(false);
+    (generateText as jest.Mock).mockResolvedValue({
+      data: {
+        choices: [{ text: 'generated text' }]
+      }
     });
+
+    const response = await request(app).post('/gpt-proxy').send({ text: 'test input' });
+
+    expect(isMedicalContent).toHaveBeenCalledWith('test input');
+    expect(containsSensitiveWords).toHaveBeenCalledWith('test input');
+    expect(generateText).toHaveBeenCalledWith('test input');
+    expect(response.status).toBe(200);
+    expect(response.body).toBe('generated text');
   });
 
-  it('should respond with generated text when given valid medical content', async () => {
-    const inputText = 'Some valid medical content';
-    const response = await request(app).post('/gpt-proxy').send({ text: inputText }).expect(200);
+  test('returns error if GPT API request fails', async () => {
+    (isMedicalContent as jest.Mock).mockReturnValue(true);
+    (containsSensitiveWords as jest.Mock).mockReturnValue(false);
+    (generateText as jest.Mock).mockRejectedValue(new Error('GPT API请求失败'));
 
-    expect(response.body).toBeTruthy();
-    expect(typeof response.body).toBe('string');
-  });
+    const response = await request(app).post('/gpt-proxy').send({ text: 'test input' });
 
-  it('should respond with error when given non-medical content', async () => {
-    const inputText = 'Some non-medical content';
-    const response = await request(app).post('/gpt-proxy').send({ text: inputText }).expect(400);
-
-    expect(response.body).toHaveProperty('error');
-    expect(response.body.error).toBe('非医疗内容或包含敏感词');
-  });
-
-  it('should respond with error when given sensitive content', async () => {
-    const inputText = 'Some sensitive content';
-    const response = await request(app).post('/gpt-proxy').send({ text: inputText }).expect(400);
-
-    expect(response.body).toHaveProperty('error');
-    expect(response.body.error).toBe('非医疗内容或包含敏感词');
-  });
-
-  it('should respond with error when GPT API fails', async () => {
-    const inputText = 'Some valid medical content';
-    jest.spyOn(openai, 'createCompletion').mockImplementation(() => {
-      throw new Error('GPT API请求失败');
-    });
-
-    const response = await request(app).post('/gpt-proxy').send({ text: inputText }).expect(500);
-
-    expect(response.body).toHaveProperty('error');
-    expect(response.body.error).toBe('GPT API请求失败');
+    expect(isMedicalContent).toHaveBeenCalledWith('test input');
+    expect(containsSensitiveWords).toHaveBeenCalledWith('test input');
+    expect(generateText).toHaveBeenCalledWith('test input');
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ error: 'GPT API请求失败' });
   });
 });
