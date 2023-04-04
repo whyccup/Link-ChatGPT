@@ -12,6 +12,12 @@ app.use(express.json());
 app.post('/gpt-proxy', async (req: Request, res: Response) => {
   const inputText = req.body.text;
 
+  // Check if inputText is empty or undefined
+  if (!inputText) {
+    res.status(400).send('Bad Request: inputText is empty or undefined');
+    return;
+  }
+
   if (!isMedicalContent(inputText) || containsSensitiveWords(inputText)) {
     console.log('inputText', inputText);
     res.status(400).json({ error: '非医疗内容或包含敏感词' });
