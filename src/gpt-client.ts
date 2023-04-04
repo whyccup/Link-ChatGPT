@@ -1,5 +1,7 @@
 import { Configuration, OpenAIApi } from 'openai';
+import dotenv from 'dotenv';
 
+dotenv.config();
 const GPT_API_KEY = process.env.GPT_API_KEY;
 
 const configuration = new Configuration({
@@ -22,4 +24,4 @@ async function getModeList() {
   const response = await openai.listModels();
   console.log(response);
 }
-export { openai, generateText, getModeList };
+export { GPT_API_KEY, openai, generateText, getModeList };
