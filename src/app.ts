@@ -1,5 +1,8 @@
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
+// import jwt from 'jsonwebtoken';
+// import fs from 'fs';
+// import { isString } from 'lodash';
 import logger from './logger';
 import { generateText } from './gpt-client';
 import { isMedicalContent, containsSensitiveWords } from './utils';
@@ -7,12 +10,28 @@ import { isMedicalContent, containsSensitiveWords } from './utils';
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 
+// Load public key
+// const publicKey = fs.readFileSync('./public_key.pem', 'utf8');
+
 const app = express();
 app.use(express.json());
 
 app.post('/gpt-proxy', async (req: Request, res: Response) => {
   logger.info('when gpt-proxy get post', req.body);
   const inputText = req.body.text;
+
+  // const token = req.headers['x-auth-token'];
+  // if (!token || !isString(token)) {
+  //   res.status(401).send('Unauthorized: No token provided');
+  //   return;
+  // }
+
+  // try {
+  //   jwt.verify(token, publicKey, { algorithms: ['RS256'] });
+  // } catch (error) {
+  //   res.status(401).send('Unauthorized: Invalid token');
+  //   return;
+  // }
 
   if (!inputText) {
     res.status(400).send('Bad Request: inputText is empty or undefined');
