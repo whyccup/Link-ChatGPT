@@ -1,0 +1,9 @@
+{
+  "apps": [
+    {
+      "name": "gpt-api-proxy",
+      "script": "npm",
+      "args": "run prod"
+    }
+  ]
+}
