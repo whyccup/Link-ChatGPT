@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "subscriptionId": {
+            "value": "009d37c1-0ecd-4200-b2dd-cdbedbb8398c"
+        },
+        "name": {
+            "value": "ChatGPT-Link-Medical"
+        },
+        "location": {
+            "value": "Southeast Asia"
+        },
+        "hostingPlanName": {
+            "value": "ASP-ChatGPT-ba69"
+        },
+        "serverFarmResourceGroup": {
+            "value": "ChatGPT"
+        },
+        "alwaysOn": {
+            "value": false
+        },
+        "ftpsState": {
+            "value": "FtpsOnly"
+        },
+        "sku": {
+            "value": "Basic"
+        },
+        "skuCode": {
+            "value": "B1"
+        },
+        "numberOfWorkers": {
+            "value": "1"
+        },
+        "workerSize": {
+            "value": "0"
+        },
+        "workerSizeId": {
+            "value": "0"
+        },
+        "linuxFxVersion": {
+            "value": "NODE|18-lts"
+        },
+        "repoUrl": {
+            "value": "https://github.com/whyccup/Link-ChatGPT"
+        },
+        "branch": {
+            "value": "main"
+        }
+    }
+}
