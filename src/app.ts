@@ -16,6 +16,8 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 app.use(express.json());
 
+app.use(express.static('public'));
+
 app.post('/gpt-proxy', async (req: Request, res: Response) => {
   logger.info('when gpt-proxy get post', req.body);
   const inputText = req.body.text;
