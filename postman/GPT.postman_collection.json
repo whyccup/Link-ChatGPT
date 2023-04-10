@@ -23,14 +23,88 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8086/gpt-proxy",
+					"raw": "http://localhost:3000/gpt-proxy",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8086",
+					"port": "3000",
 					"path": [
 						"gpt-proxy"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "官方方法请求model列表",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "OpenAI-Organization",
+						"value": "org-lqKXheDHvoEcMIDUX4FbShAx",
+						"type": "default"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer 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",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "https://api.openai.com/v1/models",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openai",
+						"com"
+					],
+					"path": [
+						"v1",
+						"models"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "官方方法获取model回复",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer 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",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"model\": \"gpt-3.5-turbo\",\r\n    \"messages\": [\r\n        {\r\n            \"role\": \"user\",\r\n            \"content\": \"Say this is a test!\"\r\n        }\r\n    ],\r\n    \"temperature\": 0.7\r\n}"
+				},
+				"url": {
+					"raw": "https://api.openai.com/v1/chat/completions",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openai",
+						"com"
+					],
+					"path": [
+						"v1",
+						"chat",
+						"completions"
 					]
 				}
 			},
