@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 // import fs from 'fs';
 // import { isString } from 'lodash';
 import logger from './logger';
-import { generateText } from './gpt-client';
+import { generateText, generateChat } from './gpt-client';
 import { isMedicalContent, containsSensitiveWords } from './utils';
 
 dotenv.config();
@@ -47,8 +47,9 @@ app.post('/gpt-proxy', async (req: Request, res: Response) => {
   }
 
   try {
-    const response = await generateText(inputText);
-    res.json(response.data.choices[0].text);
+    const response = await generateChat(inputText);
+    // res.json(response.data.choices[0].text);
+    res.json(response);
     logger.info('when gpt-api return', response);
   } catch (error) {
     logger.error('when gpt-api return a error', error);
