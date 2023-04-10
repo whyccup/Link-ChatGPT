@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 const GPT_API_KEY = process.env.GPT_API_KEY;
+const USE_PROXY = process.env.NODE_ENV === 'Development';
 
 const configuration = new Configuration({
   apiKey: GPT_API_KEY
@@ -10,13 +11,15 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-const axiosConfig = {
-  proxy: {
-    host: '127.0.0.1',
-    port: 7078,
-    protocol: 'Socks5'
-  }
-};
+const axiosConfig = USE_PROXY
+  ? {
+      proxy: {
+        host: '127.0.0.1',
+        port: 7078,
+        protocol: 'Socks5'
+      }
+    }
+  : undefined;
 
 async function generateText(prompt: string) {
   return await openai.createCompletion(
@@ -41,7 +44,6 @@ async function generateChat(content: string) {
 }
 
 async function getModeList() {
-  const response = await openai.listModels();
-  return response;
+  return await openai.listModels();
 }
 export { GPT_API_KEY, openai, generateText, generateChat, getModeList };
