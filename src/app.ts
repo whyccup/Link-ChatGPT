@@ -48,8 +48,7 @@ app.post('/gpt-proxy', async (req: Request, res: Response) => {
 
   try {
     const response = await generateChat(inputText);
-    // res.json(response.data.choices[0].text);
-    res.json(response);
+    res.json({ result: response.data.choices[0].message ?? 'null' });
     logger.info('when gpt-api return', response);
   } catch (error) {
     logger.error('when gpt-api return a error', error);
