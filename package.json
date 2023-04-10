@@ -4,11 +4,10 @@
   "description": "GPT API proxy with content filtering",
   "main": "app.js",
   "scripts": {
+    "start": "cross-env NODE_ENV=Production tsc && node dist/app.js",
+    "dev": "cross-env NODE_ENV=Development tsc-watch --onSuccess \"node dist/app.js\"",
     "test": "jest test",
-    "start": "tsc && node dist/app.js",
-    "dev": "tsc-watch --onSuccess \"node dist/app.js\"",
-    "build": "tsc",
-    "prod": "node dist/app.js"
+    "build": "tsc"
   },
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.1",
@@ -30,6 +29,7 @@
     "@typescript-eslint/eslint-plugin": "^5.57.0",
     "@typescript-eslint/parser": "^5.57.0",
     "axios-mock-adapter": "^1.21.4",
+    "cross-env": "^7.0.3",
     "eslint": "^8.37.0",
     "eslint-import-resolver-typescript": "^3.5.4",
     "jest": "^29.5.0",
