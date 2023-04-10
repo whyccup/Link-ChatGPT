@@ -15,7 +15,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"text\": \"不舒服\"}",
+					"raw": "{\"text\": \"肚子疼吃蓝莓\"}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -105,6 +105,35 @@
 						"v1",
 						"chat",
 						"completions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "aure gpt-proxy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\": \"肚子疼吃\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://link-chatgpt.azurewebsites.net/gpt-proxy",
+					"protocol": "https",
+					"host": [
+						"link-chatgpt",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"gpt-proxy"
 					]
 				}
 			},
