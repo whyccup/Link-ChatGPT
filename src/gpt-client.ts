@@ -10,20 +10,34 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
+const axiosConfig = {
+  proxy: {
+    host: '127.0.0.1',
+    port: 7078,
+    protocol: 'Socks5'
+  }
+};
+
 async function generateText(prompt: string) {
-  return await openai.createCompletion({
-    model: 'gpt-3.5-turbo',
-    prompt: prompt,
-    max_tokens: 100
-  });
+  return await openai.createCompletion(
+    {
+      model: 'gpt-3.5-turbo',
+      prompt: prompt,
+      max_tokens: 100
+    },
+    axiosConfig
+  );
 }
 
 async function generateChat(content: string) {
-  return await openai.createChatCompletion({
-    model: 'gpt-3.5-turbo',
-    messages: [{ role: 'user', content: content }],
-    max_tokens: 100
-  });
+  return await openai.createChatCompletion(
+    {
+      model: 'gpt-3.5-turbo',
+      messages: [{ role: 'user', content: content }],
+      max_tokens: 100
+    },
+    axiosConfig
+  );
 }
 
 async function getModeList() {
