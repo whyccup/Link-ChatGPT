@@ -7,7 +7,10 @@
     "start": "cross-env NODE_ENV=Production tsc && node dist/app.js",
     "dev": "cross-env NODE_ENV=Development tsc-watch --onSuccess \"node dist/app.js\"",
     "test": "jest test",
-    "build": "tsc"
+    "build": "tsc",
+    "docker:build": "docker build -t link-chatgpt .",
+    "docker:start": "docker run -p 3000:3000 -d link-chatgpt",
+    "docker:dev": "docker build -t link-chatgpt-dev . && docker run -d --network='host' link-chatgpt-dev"
   },
   "engines": {
     "node": ">=18.0.0 <=18.16.0"
